@@ -3,6 +3,7 @@ package com.biblioteca.b.model;
 import com.biblioteca.b.controller.dto.BookDto;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.domain.Page;
 
 import javax.persistence.Entity;
 
@@ -36,6 +37,8 @@ public class Book {
         this.author = author;
     }
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -49,7 +52,7 @@ public class Book {
         return Objects.hash(id, amount, title, author, status);
     }
 
-    public static List<BookDto> convert(List<Book> bookList) {
-        return bookList.stream().map(BookDto::new).collect(Collectors.toList());
+    public static Page<BookDto> convert(Page<Book> bookList) {
+        return bookList.map(BookDto::new);
     }
 }

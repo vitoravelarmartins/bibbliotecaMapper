@@ -21,7 +21,7 @@ public class SignUpService {
                                               UriComponentsBuilder uriComponentsBuilder) {
         Person person = personForm.convert();
         personRepository.save(person);
-        URI uri = uriComponentsBuilder.path("/person/{id}").buildAndExpand(person.getId()).toUri();
+        URI uri = uriComponentsBuilder.path("/users/{id}").buildAndExpand(person.getId()).toUri();
         return ResponseEntity.created(uri).body(new PersonDto(person));
     }
 }

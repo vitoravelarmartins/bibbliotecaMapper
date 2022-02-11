@@ -1,16 +1,15 @@
 package com.biblioteca.b.model;
 
-import com.biblioteca.b.controller.dto.PersonDto;
+
 import com.biblioteca.b.controller.dto.RentedDto;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.domain.Page;
+
 import javax.persistence.Entity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -29,6 +28,7 @@ public class Rented {
     private LocalDateTime dateDelivery;
     @Enumerated(EnumType.STRING)
     private StatusRented status = StatusRented.NO_PRAZO;
+    private String urlAvatar;
 
     public Rented(Person person, Book book, LocalDateTime dateDelivery) {
         this.person = person;
@@ -43,8 +43,8 @@ public class Rented {
     }
 
 
-    public static List<RentedDto> converter(List<Rented> renteds){
-        return renteds.stream().map(RentedDto::new).collect(Collectors.toList());
+    public static Page<RentedDto> converter(Page<Rented> renteds){
+        return renteds.map(RentedDto::new);
     }
 
 

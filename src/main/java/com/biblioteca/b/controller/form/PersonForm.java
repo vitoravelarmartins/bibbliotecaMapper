@@ -5,6 +5,7 @@ import com.biblioteca.b.model.Person;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -27,8 +28,7 @@ public class PersonForm {
 
 
     public Person convert(){
-      //  String passwordKeyCrypt = new BCryptPasswordEncoder().encode(passwordKey);
-        String passwordKeyCrypt =  passwordKey;
+        String passwordKeyCrypt = new BCryptPasswordEncoder().encode(passwordKey);
         return new Person(firstName,lastName,email,passwordKeyCrypt);
     }
 }
