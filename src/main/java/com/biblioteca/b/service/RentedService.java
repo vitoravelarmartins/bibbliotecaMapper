@@ -58,7 +58,7 @@ public class RentedService {
             return Rented.converter(byPerson_idAndBook_title);
         }
 
-c
+
     }
 
     public ResponseEntity<?> renting(String idUserStr, RentedForm rentedForm, UriComponentsBuilder uriComponentsBuilder) {
