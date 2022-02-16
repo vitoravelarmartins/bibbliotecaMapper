@@ -9,9 +9,8 @@ import com.biblioteca.b.repository.BookRepository;
 import com.biblioteca.b.repository.LeaseHistoryRepository;
 import com.biblioteca.b.repository.PersonRepository;
 import com.biblioteca.b.repository.RentedRepository;
-import com.biblioteca.b.service.tool.AutomaticRun;
-import com.biblioteca.b.service.tool.VerifyBook;
-import com.biblioteca.b.service.tool.VerifyRented;
+import com.biblioteca.b.service.tools.VerifyBook;
+import com.biblioteca.b.service.tools.VerifyRented;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 
@@ -68,11 +68,10 @@ public class RentedService {
 
 
         System.out.println("ID de quem esta autenticado: " + authentication.getPrincipal());
+        Optional<Book> book = Optional.ofNullable((bookRepository.findById(
+                rentedForm.getBook()).orElseThrow(() -> new EntityNotFoundException("ID livro " + rentedForm.getBook() + ", não encontrado"))));
 
-        Optional<Book> book = Optional.ofNullable((bookRepository.findById(rentedForm.getBook()).orElseThrow(() -> new EntityNotFoundException("ID livro " + rentedForm.getBook() + ", não encontrado"))));
-
-
-        if (book.get().getStatus().equals(StatusBook.INDISPONIVEL) || book.get().getAmount() <= 0) {
+            if (book.get().getStatus().equals(StatusBook.INDISPONIVEL) || book.get().getAmount() <= 0) {
             return new ResponseEntity<>("No momento o livro " + book.get().getTitle() + " esta indisponível.", HttpStatus.ACCEPTED);
         } else {
             Rented rented = rentedForm.convert(idUser, personRepository, rentedForm.getBook(), bookRepository);
@@ -81,7 +80,6 @@ public class RentedService {
 
 
             Rented rentedCreate = rentedRepository.save(rented);
-            System.out.println("Meuuuu ID: " + rentedCreate.getId());
 
             URI uri = uriComponentsBuilder.path("/users/{idUser}/locacoes/{id}").buildAndExpand(idUser, rentedCreate.getId()).toUri();
             rented.setUrlAvatar(uri.toString());

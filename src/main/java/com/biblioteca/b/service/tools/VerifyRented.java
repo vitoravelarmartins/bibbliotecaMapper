@@ -1,18 +1,15 @@
-package com.biblioteca.b.service.tool;
+package com.biblioteca.b.service.tools;
 
 import com.biblioteca.b.model.Person;
 import com.biblioteca.b.model.Rented;
 import com.biblioteca.b.model.StatusRented;
 import com.biblioteca.b.model.StatusUser;
-import com.biblioteca.b.repository.BookRepository;
 import com.biblioteca.b.repository.PersonRepository;
 import com.biblioteca.b.repository.RentedRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class VerifyRented {
@@ -23,12 +20,12 @@ public class VerifyRented {
         LocalDateTime dateNow = LocalDateTime.now();
         List<Rented> rentedList = rentedRepository.findAll();
 
-            rentedList.stream().parallel()
+            rentedList.stream()
                     .filter(d -> d.getDateDelivery().compareTo(dateNow) > 0)
                     .forEach(r -> statusSettings(r, rentedRepository,
                             r.getPerson().getId(),personRepository,StatusRented.NO_PRAZO,StatusUser.COM_LIVRO));
 
-        rentedList.stream().parallel()
+        rentedList.stream()
                 .filter(d -> d.getDateDelivery().compareTo(dateNow) < 0)
                 .forEach(r -> statusSettings(r, rentedRepository,
                         r.getPerson().getId(),personRepository,StatusRented.ATRASADO,StatusUser.DEVEDOR));
