@@ -24,14 +24,14 @@ public class Person implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idPerson;
     private String firstName;
     private String lastName;
     private String email;
     @JsonIgnore
     private String passwordKey;
     @Enumerated(EnumType.STRING)
-    private StatusUser status = StatusUser.SEM_LIVRO;
+    private StatusUser statusPerson = StatusUser.SEM_LIVRO;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<ProfileTypes> profileTypes = new ArrayList<>();
@@ -51,18 +51,18 @@ public class Person implements UserDetails {
         if (this == o) return true;
         if (!(o instanceof Person)) return false;
         Person person = (Person) o;
-        return id.equals(person.id) && firstName.equals(person.firstName) && lastName.equals(person.lastName) && email.equals(person.email) && passwordKey.equals(person.passwordKey) && status == person.status;
+        return idPerson.equals(person.idPerson) && firstName.equals(person.firstName) && lastName.equals(person.lastName) && email.equals(person.email) && passwordKey.equals(person.passwordKey) && statusPerson == person.statusPerson;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, email, passwordKey, status);
+        return Objects.hash(idPerson, firstName, lastName, email, passwordKey, statusPerson);
     }
 
 
-    public static List<PersonDto> convert(List<Person> personList){
-        return personList.stream().map(PersonDto::new).collect(Collectors.toList());
-    }
+//    public static List<PersonDto> convert(List<Person> personList){
+//        return personList.stream().map(PersonDto::new).collect(Collectors.toList());
+//    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

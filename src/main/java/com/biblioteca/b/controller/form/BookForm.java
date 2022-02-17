@@ -20,7 +20,4 @@ public class BookForm {
     @NotNull @NotEmpty @Length(min = 2, max = 100)
     private String author;
 
-    public Book convert(){
-        return new Book(amount, title, author);
-    }
 }

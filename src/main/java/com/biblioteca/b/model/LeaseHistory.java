@@ -15,7 +15,7 @@ public class LeaseHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idLease;
     @ManyToOne
     private Person person;
     @ManyToOne
@@ -24,17 +24,17 @@ public class LeaseHistory {
     private LocalDateTime dateRent;
     private LocalDateTime dateDelivery= LocalDateTime.now();
     @Enumerated(EnumType.STRING)
-    private StatusRented status;
+    private StatusRented statusLease;
 
     public LeaseHistory() {
     }
 
     public LeaseHistory(Rented rented){
       this.person = rented.getPerson();
-      this.book = rented.getBook();
+     this.book = rented.getBook();
       this.dateRent = rented.getDateRent();
       this.dateDelivery = getDateDelivery();
-      this.status = rented.getStatus();
+     this.statusLease = rented.getStatusRented();
 
   }
 

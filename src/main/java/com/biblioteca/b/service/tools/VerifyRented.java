@@ -23,12 +23,12 @@ public class VerifyRented {
             rentedList.stream()
                     .filter(d -> d.getDateDelivery().compareTo(dateNow) > 0)
                     .forEach(r -> statusSettings(r, rentedRepository,
-                            r.getPerson().getId(),personRepository,StatusRented.NO_PRAZO,StatusUser.COM_LIVRO));
+                            r.getPerson().getIdPerson(),personRepository,StatusRented.NO_PRAZO,StatusUser.COM_LIVRO));
 
         rentedList.stream()
                 .filter(d -> d.getDateDelivery().compareTo(dateNow) < 0)
                 .forEach(r -> statusSettings(r, rentedRepository,
-                        r.getPerson().getId(),personRepository,StatusRented.ATRASADO,StatusUser.DEVEDOR));
+                        r.getPerson().getIdPerson(),personRepository,StatusRented.ATRASADO,StatusUser.DEVEDOR));
 
         System.out.println("VERIFY RENTED: "+"Verificando com sucesso todos so livros locados e setando atrasados.");
 
@@ -37,9 +37,9 @@ public class VerifyRented {
     public void statusSettings(Rented rented,
                                RentedRepository rentedRepository,
                                Long id, PersonRepository personRepository,StatusRented statusRented, StatusUser statusUser) {
-        rented.setStatus(statusRented);
+        rented.setStatusRented(statusRented);
         Optional<Person> byId = personRepository.findById(id);
-        byId.get().setStatus(statusUser);
+        byId.get().setStatusPerson(statusUser);
         personRepository.save(byId.get());
         rentedRepository.save(rented);
 

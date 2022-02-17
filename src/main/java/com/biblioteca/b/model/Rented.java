@@ -1,10 +1,9 @@
 package com.biblioteca.b.model;
 
 
-import com.biblioteca.b.controller.dto.RentedDto;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.domain.Page;
+
 
 import javax.persistence.Entity;
 
@@ -18,7 +17,7 @@ public class Rented {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idRented;
     @ManyToOne
     private Person person;
     @ManyToOne
@@ -27,25 +26,10 @@ public class Rented {
     private LocalDateTime dateRent = LocalDateTime.now();
     private LocalDateTime dateDelivery;
     @Enumerated(EnumType.STRING)
-    private StatusRented status = StatusRented.NO_PRAZO;
-    private String urlAvatar;
+    private StatusRented statusRented = StatusRented.NO_PRAZO;
 
-    public Rented(Person person, Book book, LocalDateTime dateDelivery) {
-        this.person = person;
-        this.book = book;
-        this.dateDelivery = dateDelivery;
-    }
+
 
     public Rented() {
     }
-
-    public Rented(Rented rented) {
-    }
-
-
-    public static Page<RentedDto> converter(Page<Rented> renteds){
-        return renteds.map(RentedDto::new);
-    }
-
-
 }

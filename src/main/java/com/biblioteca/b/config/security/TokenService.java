@@ -26,7 +26,7 @@ public class TokenService {
 
         return Jwts.builder()
                 .setIssuer("API Bibblioteca vitor")
-                .setSubject(logged.getId().toString())
+                .setSubject(logged.getIdPerson().toString())
                 .setIssuedAt(nowDate)
                 .setExpiration(dataExpiration)
                 .signWith(SignatureAlgorithm.HS256, secret)

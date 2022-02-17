@@ -2,8 +2,6 @@ package com.biblioteca.b.controller;
 
 import com.biblioteca.b.controller.dto.BookDto;
 import com.biblioteca.b.controller.form.BookForm;
-import com.biblioteca.b.model.Book;
-import com.biblioteca.b.repository.BookRepository;
 import com.biblioteca.b.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,8 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import java.net.URI;
-import java.util.List;
+
 
 //Para cadastrar livro so Admin da biblioteca
 

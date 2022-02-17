@@ -2,6 +2,7 @@ package com.biblioteca.b.service;
 
 import com.biblioteca.b.controller.dto.PersonDto;
 import com.biblioteca.b.controller.form.PersonForm;
+import com.biblioteca.b.mapper.PersonMapper;
 import com.biblioteca.b.model.Person;
 import com.biblioteca.b.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,13 @@ public class SignUpService {
     @Autowired
     public PersonRepository personRepository;
 
+    @Autowired
+    public PersonMapper personMapper;
+
     public ResponseEntity<PersonDto> register(PersonForm personForm,
                                               UriComponentsBuilder uriComponentsBuilder) {
-        Person person = personForm.convert();
-        personRepository.save(person);
-        URI uri = uriComponentsBuilder.path("/users/{id}").buildAndExpand(person.getId()).toUri();
-        return ResponseEntity.created(uri).body(new PersonDto(person));
+        Person savedPerson = personRepository.save(personMapper.formToPerson(personForm));
+        URI uri = uriComponentsBuilder.path("/users/{id}").buildAndExpand(savedPerson.getIdPerson()).toUri();
+        return ResponseEntity.created(uri).body(personMapper.personToDto(savedPerson));
     }
 }

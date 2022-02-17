@@ -16,7 +16,7 @@ public class ProfileTypes implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idProfile;
     private String profile;
 
 

@@ -19,16 +19,22 @@ public class PersonForm {
     @NotEmpty
     @Length(min = 2, max = 100)
     private String firstName;
-    @NotNull @NotEmpty @Length(min = 2, max = 100)
+    @NotNull
+    @NotEmpty
+    @Length(min = 2, max = 100)
     private String lastName;
-    @NotNull @NotEmpty @Length(min = 7) @Email
+    @NotNull
+    @NotEmpty
+    @Length(min = 7)
+    @Email
     private String email;
-    @NotNull @NotEmpty @Length(min = 8)
+    @NotNull
+    @NotEmpty
+    @Length(min = 8)
     private String passwordKey;
 
-
-    public Person convert(){
-        String passwordKeyCrypt = new BCryptPasswordEncoder().encode(passwordKey);
-        return new Person(firstName,lastName,email,passwordKeyCrypt);
+    public String getPasswordKey() {
+        String passwordKeyCrypt = new BCryptPasswordEncoder().encode(this.passwordKey);
+        return passwordKeyCrypt;
     }
 }

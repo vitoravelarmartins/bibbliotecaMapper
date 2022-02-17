@@ -24,7 +24,7 @@ public class SigninController {
     public SigninService signinService;
 
     @PostMapping
-    public ResponseEntity<TokenDto> auth(
+    public ResponseEntity<?> auth(
                                          @RequestBody @Valid SigninForm signinForm,
                                          UriComponentsBuilder uriComponentsBuilder){
         return signinService.authentication(signinForm, uriComponentsBuilder);

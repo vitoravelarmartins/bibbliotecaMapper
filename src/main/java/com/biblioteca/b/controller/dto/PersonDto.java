@@ -1,25 +1,16 @@
 package com.biblioteca.b.controller.dto;
 
-import com.biblioteca.b.model.Person;
 import com.biblioteca.b.model.StatusUser;
 import lombok.Getter;
-
-import java.util.List;
-
+import lombok.Setter;
 
 @Getter
+@Setter
 public class PersonDto  {
-    private Long id;
+
+    private Long idPerson;
     private String firstName;
     private String lastName;
-    private StatusUser status;
-
-    public PersonDto(Person person) {
-        this.id = person.getId();
-        this.firstName = person.getFirstName();
-        this.lastName = person.getLastName();
-        this.status = person.getStatus();
-    }
-
-
+    private StatusUser statusPerson;
+    private String email;
 }

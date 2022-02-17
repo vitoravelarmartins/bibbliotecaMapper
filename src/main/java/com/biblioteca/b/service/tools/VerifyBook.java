@@ -25,7 +25,7 @@ public class VerifyBook {
     }
 
     public void statusSettings(BookRepository bookRepository, Book book, StatusBook statusBook) {
-        book.setStatus(statusBook);
+        book.setStatusBook(statusBook);
         bookRepository.save(book);
     }
 
