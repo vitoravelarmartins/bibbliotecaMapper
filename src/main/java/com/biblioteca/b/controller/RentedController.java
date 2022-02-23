@@ -6,6 +6,8 @@ import com.biblioteca.b.controller.form.RentedForm;
 import com.biblioteca.b.model.Rented;
 import com.biblioteca.b.service.RentedService;
 import com.biblioteca.b.service.SecurityCheck;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +24,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/users/{idUser}/locacoes")
-@PreAuthorize("@securityCheck.check(#idUserStr,authentication)")
+@PreAuthorize("@securityCheck.check(#idUser,authentication)")
 public class RentedController {
 
 
@@ -32,61 +34,64 @@ public class RentedController {
     @Autowired
     private SecurityCheck securityCheck;
 
-
+   @Operation(security = @SecurityRequirement(name = "Authorization"))
     @GetMapping("/{id}")
-    public ResponseEntity<RentedDto> details(@PathVariable("idUser") String idUserStr,
-                                             @PathVariable("id") String idS) {
-        Long id = Long.valueOf(idS);
-        ResponseEntity<RentedDto> rentedDtoResponseEntity = rentedService.findById(id);
+    public ResponseEntity<RentedDto> details(@PathVariable("idUser") Long idUser,
+                                          @PathVariable("id") Long idS) {
+
+       System.out.println("Eu sou idS: "+idS);
+       System.out.println("Eu sou idUser: "+idUser);
+       ResponseEntity<RentedDto> rentedDtoResponseEntity = rentedService.findById(idS);
         return rentedDtoResponseEntity;
 
-    }
 
+    }
+    @Operation(security = @SecurityRequirement(name = "Authorization"))
     @GetMapping
-    public Page<RentedDto> list(@PathVariable("idUser") String idUserStr,
-                                @RequestParam(required = false) String bookTitle,
+    public Page<RentedDto> list(@PathVariable("idUser") Long idUser,
+                               @RequestParam(required = false) String bookTitle,
                                 @PageableDefault(sort = "dateDelivery",
                                         direction = Sort.Direction.DESC,
                                         page = 0, size = 10) Pageable pageable) {
-        Page<RentedDto> rentedDtoResponseEntity = rentedService.findAll(idUserStr, bookTitle, pageable);
+        Page<RentedDto> rentedDtoResponseEntity = rentedService.findAll(idUser, bookTitle, pageable);
         return rentedDtoResponseEntity;
 
     }
-
+    @Operation(security = @SecurityRequirement(name = "Authorization"))
     @Transactional
     @PostMapping("/locar")
-    public ResponseEntity<?> renting(@PathVariable("idUser") String idUserStr,
+    public ResponseEntity<?> renting(@PathVariable("idUser") Long idUser,
                                      //      @PathVariable("idBook") String idBookStr,
                                      @RequestBody @Valid RentedForm rentedForm,
                                      UriComponentsBuilder uriComponentsBuilder) {
-        return rentedService.renting(idUserStr, rentedForm, uriComponentsBuilder);
+        return rentedService.renting(idUser, rentedForm, uriComponentsBuilder);
 
     }
 
-
+    @Operation(security = @SecurityRequirement(name = "Authorization"))
     @Transactional
     @PostMapping("/{id}/devolver")
-    public ResponseEntity<?> delivery(@PathVariable("idUser") String idUserStr,
+    public ResponseEntity<?> delivery(@PathVariable("idUser") Long idUser,
                                       @PathVariable("id") String idRentedStr,
                                       UriComponentsBuilder uriComponentsBuilder) {
-        return rentedService.delivery(idUserStr, idRentedStr, uriComponentsBuilder);
+        return rentedService.delivery(idUser, idRentedStr, uriComponentsBuilder);
     }
-
+    @Operation(security = @SecurityRequirement(name = "Authorization"))
     @GetMapping("/leaseHistory")
-    public Page<RentedDto> detailsLease(@PathVariable("idUser") String idUserStr,
+    public Page<RentedDto> detailsLease(@PathVariable("idUser") Long idUser,
                                         @RequestParam(required = false) String bookTitle,
                                         @PageableDefault(sort = "dateDelivery",
                                                 direction = Sort.Direction.DESC,
                                                 page = 0, size = 10) Pageable pageable) {
-        Page<RentedDto> rentedDtoResponseEntity = rentedService.leaseFind(idUserStr, bookTitle, pageable);
+        Page<RentedDto> rentedDtoResponseEntity = rentedService.leaseFind(idUser, bookTitle, pageable);
         return rentedDtoResponseEntity;
 
     }
-
+    @Operation(security = @SecurityRequirement(name = "Authorization"))
     @GetMapping("/leaseHistory/{idLease}")
-    public ResponseEntity<RentedDto> detailsLeaseFindId(@PathVariable("idUser") String idUserStr,
-                                        @PathVariable("idLease") String idLeaseString) {
-        ResponseEntity<RentedDto> rentedDtoResponseEntity = rentedService.leaseFind(idLeaseString);
+    public ResponseEntity<RentedDto> detailsLeaseFindId(@PathVariable("idUser") Long idUser,
+                                        @PathVariable("idLease") Long idLease) {
+        ResponseEntity<RentedDto> rentedDtoResponseEntity = rentedService.leaseFindId(idLease);
         return rentedDtoResponseEntity;
 
     }

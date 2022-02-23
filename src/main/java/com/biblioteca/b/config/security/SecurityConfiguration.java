@@ -26,6 +26,7 @@ import javax.servlet.Filter;
         jsr250Enabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+
     @Autowired
     private AuthenticationService authenticationService;
     @Autowired
@@ -52,6 +53,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.POST,"/signup").permitAll()
                 .antMatchers(HttpMethod.POST,"/signin").permitAll()
+                .antMatchers(HttpMethod.POST,"/swagger-ui.html").permitAll()
+                .antMatchers(HttpMethod.POST,"/swagger-ui.html/*").permitAll()
+                .antMatchers(HttpMethod.POST,"/swagger-ui.html/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/swagger-ui/index.html").permitAll()
                 .anyRequest().authenticated().and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -61,6 +66,27 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**", "/swagger-resources/**");
+        web.ignoring().antMatchers("/**.html",
+                "/v2/api-docs",
+                "/webjars/**",
+                "/configuration/**",
+                "/swagger-resources/**",
+                "/v2/api-docs",
+                "/configuration/ui",
+                "/swagger-resources/**",
+                "/configuration/security",
+                "/swagger-ui.html",
+                "/webjars/**",
+                "/swagger-ui/**",
+                "/v3/api-docs/**",
+                "/v2/api-docs",
+                "/swagger-resources",
+                "/swagger-resources/**",
+                "/configuration/ui",
+                "/configuration/security",
+                "/swagger-ui.html",
+                "/webjars/**",
+                "/v3/api-docs/**",
+                "/swagger-ui/**");
     }
 }

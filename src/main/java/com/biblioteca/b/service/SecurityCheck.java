@@ -13,9 +13,9 @@ public class SecurityCheck {
     public PersonRepository personRepository;
 
 
-    public boolean check(String idUser, Authentication authentication){
+    public boolean check(Long idUser, Authentication authentication){
         Long principal = (Long) authentication.getPrincipal();
-        personRepository.findById(Long.valueOf(idUser));
+        personRepository.findById(idUser);
         Long idLong = Long.valueOf(idUser);
         if(idUser == null){
             return false;

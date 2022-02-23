@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+  mysqldbv:
+    image: mysql
+    container_name: banco_biblioteca
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "biblioteca_db"
+    networks:
+      - rede-biblioteca
+
+  app-biblioteca:
+    image: spring-biblioteca
+    container_name: app-biblioteca
+    restart: on-failure
+    environment:
+      DATASOURCE_URL: jdbc:mysql://mysqldbv:3306/biblioteca_db?useTimezone=true&serverTimezone=UTC
+      DATASOURCE_USER: root
+      DATASOURCE_PASS: root
+      TOKEN_SECRET: MY-TOKEN-BIBLIOTECA
+      SPRING.PROFILES.ACTIVE: prod
+      PORT: 8084
+    networks:
+      - rede-biblioteca
+    depends_on:
+      - mysqldbv
+
+networks:
+  rede-biblioteca:
+    name: rede-biblioteca
+    driver: bridge

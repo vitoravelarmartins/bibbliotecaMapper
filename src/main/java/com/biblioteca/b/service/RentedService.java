@@ -41,15 +41,17 @@ public class RentedService {
     @Autowired
     private RentedMapper rentedMapper;
 
-
     public ResponseEntity<RentedDto> findById(Long id) {
         Rented rented = rentedRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("ID " + id + " não encontrado"));
+
         return ResponseEntity.ok(rentedMapper.rentedToDto(rented));
+        // return ResponseEntity.ok(rentedRepository.findById(id).get());
     }
 
-    public Page<RentedDto> findAll(String idUserStr, String bookTitle, Pageable pageable) {
-        Long idUser = Long.valueOf(idUserStr);
+    public Page<RentedDto> findAll(Long idUserStr, String bookTitle, Pageable pageable) {
+        //Long idUser = Long.valueOf(idUserStr);
+        Long idUser = idUserStr;
         if (bookTitle == null) {
             return rentedRepository.findByPerson_IdPerson(idUser, pageable).map(rentedMapper::rentedToDto);
         } else {
@@ -60,11 +62,10 @@ public class RentedService {
 
     }
 
-    public ResponseEntity<?> renting(String idUserStr,
+    public ResponseEntity<?> renting(Long idUser,
                                      RentedForm rentedForm,
                                      UriComponentsBuilder uriComponentsBuilder) {
 
-        Long idUser = Long.valueOf(idUserStr);
         Optional<Person> optionalPerson = personRepository.findById(idUser);
 
         Optional<Book> book = Optional.ofNullable((bookRepository.findById(rentedForm.getBook())
@@ -88,11 +89,11 @@ public class RentedService {
 
     }
 
-    public ResponseEntity<?> delivery(String idUserStr,
+    public ResponseEntity<?> delivery(Long idUser,
                                       String idRentedStr,
                                       UriComponentsBuilder uriComponentsBuilder) {
         Long idRented = Long.valueOf(idRentedStr);
-        Long idUser = Long.valueOf(idUserStr);
+
 
         Rented rented = rentedRepository.findById(idRented)
                 .orElseThrow(() -> new EntityNotFoundException("ID Locação " + idRented + ", não encontrado"));
@@ -117,8 +118,7 @@ public class RentedService {
 
     }
 
-    public Page<RentedDto> leaseFind(String idUserStr, String bookTitle, Pageable pageable) {
-        Long idUser = Long.valueOf(idUserStr);
+    public Page<RentedDto> leaseFind(Long idUser, String bookTitle, Pageable pageable) {
 
         if (bookTitle == null) {
             return leaseHistoryRepository.findByPerson_IdPerson(idUser, pageable)
@@ -129,8 +129,7 @@ public class RentedService {
         }
     }
 
-    public ResponseEntity<RentedDto> leaseFind(String idLeaseString) {
-        Long idLease = Long.valueOf(idLeaseString);
+    public ResponseEntity<RentedDto> leaseFindId(Long idLease) {
         LeaseHistory leaseHistory = leaseHistoryRepository.findById(idLease).orElseThrow(() -> new EntityNotFoundException("ID " + idLease + ", não encontrado"));
         return ResponseEntity.ok(rentedMapper.leaseToRentedDto(leaseHistory));
 
