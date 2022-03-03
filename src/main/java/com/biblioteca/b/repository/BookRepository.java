@@ -10,6 +10,5 @@ import org.springframework.stereotype.Repository;
 public interface BookRepository extends JpaRepository<Book, Long> {
     Page<Book> findByTitle(String title, Pageable pageable);
     Page<Book> findByAuthor(String author, Pageable pageable);
-
     Page<Book> findByTitleAndAuthor(String title, String author, Pageable pageable);
 }

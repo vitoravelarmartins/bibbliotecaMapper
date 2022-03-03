@@ -27,7 +27,6 @@ import java.util.Optional;
 @Service
 public class RentedService {
 
-
     @Autowired
     private RentedRepository rentedRepository;
     @Autowired
@@ -41,16 +40,16 @@ public class RentedService {
     @Autowired
     private RentedMapper rentedMapper;
 
-    public ResponseEntity<RentedDto> findById(Long id) {
-        Rented rented = rentedRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("ID " + id + " não encontrado"));
-
-        return ResponseEntity.ok(rentedMapper.rentedToDto(rented));
-        // return ResponseEntity.ok(rentedRepository.findById(id).get());
+    public ResponseEntity<RentedDto> findById(Long id, Long idUser) {
+        Rented byIdRented = rentedRepository.findByIdRentedAndPerson_IdPerson(id, idUser);
+        if (byIdRented == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return ResponseEntity.ok(rentedMapper.rentedToDto(byIdRented));
+        }
     }
 
     public Page<RentedDto> findAll(Long idUserStr, String bookTitle, Pageable pageable) {
-        //Long idUser = Long.valueOf(idUserStr);
         Long idUser = idUserStr;
         if (bookTitle == null) {
             return rentedRepository.findByPerson_IdPerson(idUser, pageable).map(rentedMapper::rentedToDto);

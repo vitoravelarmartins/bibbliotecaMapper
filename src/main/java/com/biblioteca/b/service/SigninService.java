@@ -40,7 +40,7 @@ public class SigninService {
             return ResponseEntity.created(uri).body(new TokenDto(token, "Bearer"));
         }catch (AuthenticationException e){
             System.out.println("Error: "+e);
-            return new ResponseEntity<>("Usuário e/ou senha inválidos", HttpStatus.OK);
+            return new ResponseEntity<>("Usuário e/ou senha inválidos", HttpStatus.valueOf(401));
         }
     }
 }
