@@ -2,7 +2,6 @@ package com.biblioteca.b.service;
 
 import com.biblioteca.b.controller.dto.BookDto;
 import com.biblioteca.b.controller.form.BookForm;
-import com.biblioteca.b.exception.EntityNotFoundException;
 import com.biblioteca.b.exception.NoContent;
 import com.biblioteca.b.mapper.BookMapper;
 import com.biblioteca.b.model.Book;

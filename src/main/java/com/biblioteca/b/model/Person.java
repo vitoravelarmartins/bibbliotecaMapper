@@ -1,7 +1,7 @@
 package com.biblioteca.b.model;
 
 
-import com.biblioteca.b.controller.dto.PersonDto;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -59,14 +58,8 @@ public class Person implements UserDetails {
         return Objects.hash(idPerson, firstName, lastName, email, passwordKey, statusPerson);
     }
 
-
-//    public static List<PersonDto> convert(List<Person> personList){
-//        return personList.stream().map(PersonDto::new).collect(Collectors.toList());
-//    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
         return this.profileTypes;
     }
 

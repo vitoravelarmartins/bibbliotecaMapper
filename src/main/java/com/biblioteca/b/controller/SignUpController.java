@@ -23,7 +23,7 @@ public class SignUpController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<PersonDto> register(@RequestBody @Valid PersonForm personForm,
+    public ResponseEntity<?> register(@RequestBody @Valid PersonForm personForm,
                                               UriComponentsBuilder uriComponentsBuilder) {
         return singUpService.register(personForm, uriComponentsBuilder);
 

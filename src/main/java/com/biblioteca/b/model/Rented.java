@@ -17,7 +17,7 @@ public class Rented {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idRented;
+        private Long idRented;
     @ManyToOne
     private Person person;
     @ManyToOne
