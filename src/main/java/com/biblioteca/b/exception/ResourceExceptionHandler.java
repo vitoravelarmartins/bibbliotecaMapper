@@ -53,5 +53,18 @@ public class ResourceExceptionHandler {
 
     }
 
+    @ExceptionHandler(NoContent.class)
+    public ResponseEntity<StandartErroDto> notContent(NoContent exception,
+                                                          HttpServletRequest request){
+        StandartErroDto erroDto = new StandartErroDto();
+        erroDto.setTimestamp(Instant.now());
+        erroDto.setStatus(HttpStatus.NO_CONTENT.value());
+        erroDto.setError("Valor não encontrado");
+        erroDto.setMessage(exception.getMessage());
+        erroDto.setPath(request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(erroDto);
+
+    }
+
 
 }

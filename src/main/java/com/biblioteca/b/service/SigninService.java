@@ -27,19 +27,19 @@ public class SigninService {
 
 
     public ResponseEntity<?> authentication(SigninForm signinForm,
-                                                   UriComponentsBuilder uriComponentsBuilder) {
+                                            UriComponentsBuilder uriComponentsBuilder) {
         UsernamePasswordAuthenticationToken dataSignin = signinForm.converter();
         try {
             Authentication authentication = authenticationManager.authenticate(dataSignin);
             String token = tokenService.generateToken(authentication);
-            System.out.println("Seu token: "+token);
+            System.out.println("Seu token: " + token);
 
             Long id = tokenService.getIdPerson(token);
 
             URI uri = uriComponentsBuilder.path("/users/{id}").buildAndExpand(id).toUri();
-            return ResponseEntity.created(uri).body(new TokenDto(token, "Bearer"));
-        }catch (AuthenticationException e){
-            System.out.println("Error: "+e);
+            return new ResponseEntity<>(new TokenDto(token, "Bearer"), HttpStatus.valueOf(200));
+        } catch (AuthenticationException e) {
+            System.out.println("Error: " + e);
             return new ResponseEntity<>("Usuário e/ou senha inválidos", HttpStatus.valueOf(401));
         }
     }

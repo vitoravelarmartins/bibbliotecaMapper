@@ -3,7 +3,7 @@ package com.biblioteca.b.service;
 import com.biblioteca.b.config.security.TokenService;
 import com.biblioteca.b.controller.dto.RentedDto;
 import com.biblioteca.b.controller.form.RentedForm;
-import com.biblioteca.b.exception.EntityNotFoundException;
+import com.biblioteca.b.exception.NoContent;
 import com.biblioteca.b.mapper.RentedMapper;
 import com.biblioteca.b.model.*;
 import com.biblioteca.b.repository.BookRepository;
@@ -68,11 +68,11 @@ public class RentedService {
         Optional<Person> optionalPerson = personRepository.findById(idUser);
 
         Optional<Book> book = Optional.ofNullable((bookRepository.findById(rentedForm.getBook())
-                .orElseThrow(() -> new EntityNotFoundException("ID livro " + rentedForm.getBook() + ", não encontrado"))));
+                .orElseThrow(() -> new NoContent("ID livro " + rentedForm.getBook() + ", não encontrado"))));
 
 
         if (book.get().getStatusBook().equals(StatusBook.INDISPONIVEL) || book.get().getAmount() <= 0) {
-            return new ResponseEntity<>("No momento o livro " + book.get().getTitle() + " esta indisponível. ", HttpStatus.ACCEPTED);
+            return new ResponseEntity<>("No momento o livro " + book.get().getTitle() + " esta indisponível. ", HttpStatus.IM_USED);
         } else {
             Rented rented = rentedMapper.formToRented(optionalPerson.get(), rentedForm, book.get());
             Rented rentedCreate = rentedRepository.save(rented);
@@ -95,7 +95,7 @@ public class RentedService {
 
 
         Rented rented = rentedRepository.findById(idRented)
-                .orElseThrow(() -> new EntityNotFoundException("ID Locação " + idRented + ", não encontrado"));
+                .orElseThrow(() -> new NoContent("ID Locação " + idRented + ", não encontrado"));
 
         LeaseHistory leaseHistory = new LeaseHistory(rented);
         LeaseHistory leaseHistorySave = leaseHistoryRepository.save(leaseHistory);
@@ -129,7 +129,7 @@ public class RentedService {
     }
 
     public ResponseEntity<RentedDto> leaseFindId(Long idLease) {
-        LeaseHistory leaseHistory = leaseHistoryRepository.findById(idLease).orElseThrow(() -> new EntityNotFoundException("ID " + idLease + ", não encontrado"));
+        LeaseHistory leaseHistory = leaseHistoryRepository.findById(idLease).orElseThrow(() -> new NoContent("ID " + idLease + ", não encontrado"));
         return ResponseEntity.ok(rentedMapper.leaseToRentedDto(leaseHistory));
 
 

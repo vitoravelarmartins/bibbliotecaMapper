@@ -3,6 +3,7 @@ package com.biblioteca.b.service;
 import com.biblioteca.b.controller.dto.BookDto;
 import com.biblioteca.b.controller.form.BookForm;
 import com.biblioteca.b.exception.EntityNotFoundException;
+import com.biblioteca.b.exception.NoContent;
 import com.biblioteca.b.mapper.BookMapper;
 import com.biblioteca.b.model.Book;
 import com.biblioteca.b.repository.BookRepository;
@@ -51,7 +52,7 @@ public class BookService {
         public ResponseEntity<BookDto> findById (String idBookStr){
             Long idBook = Long.valueOf(idBookStr);
             Optional<Book> optionalBook = Optional.ofNullable((bookRepository.findById(
-                    idBook).orElseThrow(() -> new EntityNotFoundException("ID livro " + idBook + ", não encontrado"))));
+                    idBook).orElseThrow(() -> new NoContent("ID livro " + idBook + ", não encontrado"))));
             return ResponseEntity.ok(bookMapper.bookToDto(optionalBook.get()));
 
         }

@@ -79,7 +79,7 @@ class SigninControllerTest {
                         .post(uri)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON)))
-                .andExpect(MockMvcResultMatchers.status().is(201))
+                .andExpect(MockMvcResultMatchers.status().is(200))
                 .andReturn();
         String contentAsString = mvcResult.getResponse().getContentAsString();
         Jws<Claims> claimsJws = Jwts.parser().setSigningKey(this.secret).parseClaimsJws(contentAsString.substring(10, 175));
