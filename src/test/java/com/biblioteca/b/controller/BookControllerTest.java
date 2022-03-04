@@ -1,9 +1,8 @@
 package com.biblioteca.b.controller;
 
-import com.biblioteca.b.model.Book;
-import com.biblioteca.b.model.Person;
-import com.biblioteca.b.model.StatusBook;
-import com.biblioteca.b.model.StatusUser;
+import com.biblioteca.b.config.security.TokenService;
+import com.biblioteca.b.controller.form.SigninForm;
+import com.biblioteca.b.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +13,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -21,7 +23,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import javax.transaction.Transactional;
-
 import java.net.URI;
 
 @SpringBootTest
@@ -35,35 +36,40 @@ class BookControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private TestEntityManager testEntityManager;
+    @Autowired
+    private TokenService tokenService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     private String tonkenInz;
+    private Book bookInz;
+    private Person personInz;
+    private SigninForm signinFormInz;
 
     @BeforeEach
     public void initialBook() throws Exception {
-        Person personInz = new Person();
-        personInz.setFirstName("personF");
-        personInz.setLastName("pesonL");
-        personInz.setEmail("email@email.com");
-        personInz.setPasswordKey("$2a$10$zzkqMglP4a79tHwLvzTmt.ASlKF1XiRZXc8rqhZhXnNb26BR0WxgO");
-        personInz.setStatusPerson(StatusUser.SEM_LIVRO);
+        this.personInz = new Person();
+        this.personInz.setFirstName("personF");
+        this.personInz.setLastName("pesonL");
+        this.personInz.setEmail("email@email.com");
+        this.personInz.setPasswordKey("$2a$10$zzkqMglP4a79tHwLvzTmt.ASlKF1XiRZXc8rqhZhXnNb26BR0WxgO");
+        this.personInz.setStatusPerson(StatusUser.SEM_LIVRO);
         testEntityManager.persist(personInz);
 
-        URI uri = new URI("/signin");
-        String json = "{\"email\":\"email@email.com\",\"passwordKey\":\"12345678\"}";
+        this.signinFormInz = new SigninForm();
+        signinFormInz.setEmail(personInz.getEmail());
+        signinFormInz.setPasswordKey("12345678");
 
-        MvcResult mvcResult = mockMvc
-                .perform((MockMvcRequestBuilders
-                        .post(uri)
-                        .content(json)
-                        .contentType(MediaType.APPLICATION_JSON))).andReturn();
-        String contentAsString = mvcResult.getResponse().getContentAsString().substring(10, 175);
-        this.tonkenInz = contentAsString;
+        UsernamePasswordAuthenticationToken dataSignin = signinFormInz.converter();
+        Authentication authentication = authenticationManager.authenticate(dataSignin);
+        String token = tokenService.generateToken(authentication);
+        this.tonkenInz = token;
 
-        Book bookInz = new Book();
-        bookInz.setTitle("bookT");
-        bookInz.setAuthor("bookA");
-        bookInz.setStatusBook(StatusBook.DISPONIVEL);
-        bookInz.setAmount(10);
+        this.bookInz = new Book();
+        this.bookInz.setTitle("bookT");
+        this.bookInz.setAuthor("bookA");
+        this.bookInz.setStatusBook(StatusBook.DISPONIVEL);
+        this.bookInz.setAmount(10);
         testEntityManager.persist(bookInz);
     }
 

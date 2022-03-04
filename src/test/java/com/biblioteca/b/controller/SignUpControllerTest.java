@@ -1,11 +1,6 @@
 package com.biblioteca.b.controller;
 
-import com.biblioteca.b.model.Book;
-import com.biblioteca.b.model.Person;
-import com.biblioteca.b.model.StatusBook;
-import com.biblioteca.b.model.StatusUser;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;

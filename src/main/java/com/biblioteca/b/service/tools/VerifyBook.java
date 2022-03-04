@@ -21,7 +21,6 @@ public class VerifyBook {
                 .forEach(book -> statusSettings(bookRepository, book,StatusBook.DISPONIVEL));
 
         System.out.println("BOOK: ESTOU VERIFICANDO OS BOOK");
-
     }
 
     public void statusSettings(BookRepository bookRepository, Book book, StatusBook statusBook) {
